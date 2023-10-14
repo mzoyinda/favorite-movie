@@ -6,6 +6,25 @@
   padding:0;
 }
 
+
+:root{
+--mainBlue:#001d3d;
+--fontColor:#717178;
+--mainBlack: #000814;
+--mainWhite:#FBFBFB;
+}
+
 body{
   font-family: 'Inter', sans-serif;
+box-sizing: border-box;
+position: relative;
+background-color: var(--mainWhite);
+}
+
+a{
+text-decoration: none;
+}
+
+p{
+color: var(--fontColor);
 }
