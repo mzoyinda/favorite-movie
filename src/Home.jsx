@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Form from "./components/Form";
 import Footer from "./components/Footer";
 import styled from "styled-components";
-import Movie from "./components/Movie";
+import Movie from "./components/MovieAlbum";
 
 const Home = () => {
   return (

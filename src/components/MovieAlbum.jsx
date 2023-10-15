@@ -1,42 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import KOB from "../assets/kob.jpg";
+import SingleMovie from "./SingleMovie";
 
 const Movie = () => {
+  const [Modal, setModal] = useState(false);
+
+  // Movies gets populated from database in a useeffect
+  // onclick on a movie, it calls getSingleMovie api
+
   return (
     <Gallery>
+      <div
+        className={Modal ? "wrapper" : ""}
+        onClick={() => setModal(false)}
+      ></div>
       <div className="cover">
-        <div className="frame">
+        <div className="frame" onClick={() => setModal(true)}>
           <footer>
             <p>King Of Boys</p>
             <p className="year">2021</p>
           </footer>
         </div>
-        <div className="frame">
+        <div className="frame" onClick={() => setModal(true)}>
           <footer>
             <p>King Of Boys</p>
             <p className="year">2021</p>
           </footer>
         </div>
-        <div className="frame">
+        <div className="frame" onClick={() => setModal(true)}>
           <footer>
             <p>King Of Boys</p>
             <p className="year">2021</p>
           </footer>
         </div>
-        <div className="frame">
+        <div className="frame" onClick={() => setModal(true)}>
           <footer>
             <p>King Of Boys</p>
             <p className="year">2021</p>
           </footer>
         </div>
-        <div className="frame">
+        <div className="frame" onClick={() => setModal(true)}>
+          <footer>
+            <p>King Of Boys</p>
+            <p className="year">2021</p>
+          </footer>
+        </div>
+        <div className="frame" onClick={() => setModal(true)}>
           <footer>
             <p>King Of Boys</p>
             <p className="year">2021</p>
           </footer>
         </div>
       </div>
+      {Modal ? <SingleMovie /> : ""}
     </Gallery>
   );
 };
@@ -48,6 +65,13 @@ const Gallery = styled.section`
   justify-content: center;
   align-items: center;
 
+  .wrapper {
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background: var(--mainBlack);
+    opacity: 0.8;
+  }
   .cover {
     max-width: 1500px;
     width: 100%;
@@ -59,7 +83,7 @@ const Gallery = styled.section`
 
     .frame {
       width: 100%;
-      max-width: 380px;
+      max-width: 350px;
       margin-top: 26px;
       height: 300px;
       box-sizing: border-box;
@@ -67,7 +91,7 @@ const Gallery = styled.section`
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      border: 1px solid var(--mainBlue);
+      border: 5px solid var(--mainBlue);
       /* padding-bottom: 10px; */
 
       footer {
@@ -92,6 +116,7 @@ const Gallery = styled.section`
 
         p.year {
           font-weight: 400;
+          font-size: 14px;
         }
       }
     }
