@@ -6,7 +6,7 @@ const HomeNav = ({status, logout}) => {
   return (
     <NavContainer>
         <a href="/" className="brand">
-          <h1>MovieWorld</h1>
+          <h1>ChillTv</h1>
         </a>
     </NavContainer>
   );

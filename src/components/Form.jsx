@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import KOB from "../assets/kob.jpg";
+import Swal from "sweetalert2";
+import { FormContainer, SearchContainer } from "../assets/styles";
 
 const Form = () => {
   const [open, setOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [movieDetails, setMovieDetails] = useState({});
   const [disableInputs, setDisableInputs] = useState(false);
-
-
 
   const handleChange = (e) => {
     const value = e.currentTarget.value;
@@ -19,10 +17,10 @@ const Form = () => {
       ...movieDetails,
       [name]: value,
     });
-    console.log(movieDetails);
+    // console.log(movieDetails);
   };
 
-  const movieSearch = async (e) => {
+  const getMovieList = async (e) => {
     const value = e.currentTarget.value;
     setDisableInputs(false);
 
@@ -44,7 +42,7 @@ const Form = () => {
 
     if (data.Response === "True") setMovies(MovieResults);
 
-    console.log(movieDetails);
+    // console.log(movieDetails);
   };
 
   const getSingleMovie = async (movieId) => {
@@ -53,7 +51,7 @@ const Form = () => {
       `http://www.omdbapi.com/?i=${movieId}&apikey=${process.env.REACT_APP_API_KEY}`
     );
     const data = await result.json();
-
+    console.log(data);
     if (data.Response === "True")
       // set movie object to the received details:
       setMovieDetails({
@@ -63,18 +61,39 @@ const Form = () => {
         plot: data.Plot,
         year: data.Year,
         thumbnail: data.Poster,
-        imdbRating: data.imdbRating,
+        imdbRating: data.imdbRating
       });
-    //   console.log(movieDetails);
+      // console.log(movieDetails);
 
     // disable filled inputs..
     setDisableInputs(true);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(movieDetails);
+    //    get movie match from imdb with the inputed value
+    const URL = "http://localhost:5000/api/movies/";
+    const res = await fetch(URL, {
+      method: "POST",
+      body: JSON.stringify(movieDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
 
-  const handleSubmit = () => {
-    
-  }
+    const data = await res.json();
+    Swal.fire({
+      icon: "success",
+      title: "Movie Created Successfully!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    console.log(data);
+
+    setMovieDetails({});
+    setOpen(false);
+  };
 
   //  movie list component from search input
   const MovieList = () => {
@@ -107,7 +126,7 @@ const Form = () => {
           type="text"
           name="title"
           value={movieDetails.title}
-          onChange={movieSearch}
+          onChange={getMovieList}
           onClick={() => setOpen(true)}
           placeholder="Add a movie"
         />
@@ -132,6 +151,14 @@ const Form = () => {
               placeholder="Release Year"
               disabled={disableInputs}
             />
+            {/* <input
+              type="text"
+              name="rating"
+              value={movieDetails.imdbRating}
+              onChange={handleChange}
+              placeholder="External Rating (optional)"
+              disabled={disableInputs}
+            /> */}
             <input
               type="text"
               name="thumbnail"
@@ -150,11 +177,14 @@ const Form = () => {
               disabled={disableInputs}
             ></textarea>
             <input
-              type="text"
-              name="rating"
+              type="number"
+              id="number"
+              name="myRating"
+              min="1"
+              max="5"
               value={movieDetails.myRating}
               onChange={handleChange}
-              placeholder="Rate this movie from (1 - 10)"
+              placeholder="Rate this movie from (1 - 5)"
             />
             <textarea
               name="review"
@@ -169,104 +199,11 @@ const Form = () => {
           ""
         )}
         <div className="btn_Container">
-          <button>Submit</button>
+          <button onClick={handleSubmit}>Submit</button>
         </div>
       </div>
     </FormContainer>
   );
 };
-
-const FormContainer = styled.header`
-  padding: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .cover {
-    width: 80vw;
-    margin: 0 auto;
-    text-align: center;
-    position: relative;
-  }
-
-  input,
-  textarea {
-    /* display: block; */
-    font-size: 16px;
-    border: 1px solid var(--mainBlue);
-    border-radius: 3px;
-    padding: 12px 10px;
-    margin-top: 10px;
-    width: 80%;
-    resize: none;
-
-    &::placeholder {
-      color: var(--mainBlue);
-      font-size: 15px;
-    }
-  }
-
-  button {
-    width: 150px;
-    margin-top: 12px;
-    padding: 12px 10px;
-    background: var(--mainBlue);
-    border: transparent;
-    border-radius: 5px;
-    color: white;
-    &:hover {
-      cursor: pointer;
-      font-weight: 500;
-      /* background: white;
-        color: var(--mainBlue); */
-      border: 1px solid var(--mainBlue);
-    }
-  }
-
-  @media (min-width: 768px) {
-    .cover {
-      width: 80vw;
-      margin: 0 auto;
-      text-align: center;
-    }
-    input,
-    textarea {
-      width: 50%;
-    }
-  }
-`;
-
-const SearchContainer = styled.section`
-  margin: 0 auto;
-  max-width: 400px;
-  /* text-align: center; */
-  background-color: var(--mainBlack);
-  .wrapper {
-    padding-top: 5px;
-    padding-left: 15px;
-    display: flex;
-    justify-content: flex-start;
-    gap: 30px;
-    color: var(--mainWhite);
-    align-items: center;
-
-    img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-    }
-
-    h3,
-    p {
-      text-align: left;
-    }
-
-    &:hover {
-      cursor: pointer;
-      background: var(--mainBlue);
-      opacity: 0.8;
-    }
-  }
-`;
 
 export default Form;

@@ -1,13 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import KOB from "../assets/kob.jpg";
 import SingleMovie from "./SingleMovie";
+import Swal from "sweetalert2";
 
 const Movie = () => {
   const [Modal, setModal] = useState(false);
+  const [Movies, setMovies] = useState([]);
+  const [singleMovie, setSingleMovie] = useState({});
 
-  // Movies gets populated from database in a useeffect
+  // Movies gets populated from database in useeffect
+  useEffect(() => {
+    //    get all movies from server
+    const URL = "http://localhost:5000/api/movies/";
+    fetch(URL)
+      .then(function (response) {
+        console.log(response);
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        setMovies(data);
+        console.log(Movies);
+      });
+  }, []);
+
   // onclick on a movie, it calls getSingleMovie api
+  const getSingleMovie = (id) => {
+    console.log(id);
+    setModal(true);
+    const URL = `http://localhost:5000/api/movies/${id}`;
+    fetch(URL)
+      .then(function (response) {
+        console.log(response);
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        setSingleMovie(data);
+        console.log(singleMovie);
+      });
+  };
 
   return (
     <Gallery>
@@ -15,45 +48,23 @@ const Movie = () => {
         className={Modal ? "wrapper" : ""}
         onClick={() => setModal(false)}
       ></div>
+      <h1>Trending Movies</h1>
       <div className="cover">
-        <div className="frame" onClick={() => setModal(true)}>
-          <footer>
-            <p>King Of Boys</p>
-            <p className="year">2021</p>
-          </footer>
-        </div>
-        <div className="frame" onClick={() => setModal(true)}>
-          <footer>
-            <p>King Of Boys</p>
-            <p className="year">2021</p>
-          </footer>
-        </div>
-        <div className="frame" onClick={() => setModal(true)}>
-          <footer>
-            <p>King Of Boys</p>
-            <p className="year">2021</p>
-          </footer>
-        </div>
-        <div className="frame" onClick={() => setModal(true)}>
-          <footer>
-            <p>King Of Boys</p>
-            <p className="year">2021</p>
-          </footer>
-        </div>
-        <div className="frame" onClick={() => setModal(true)}>
-          <footer>
-            <p>King Of Boys</p>
-            <p className="year">2021</p>
-          </footer>
-        </div>
-        <div className="frame" onClick={() => setModal(true)}>
-          <footer>
-            <p>King Of Boys</p>
-            <p className="year">2021</p>
-          </footer>
-        </div>
+        {Movies.map((movie) => (
+          <div
+            className="frame"
+            key={movie._id}
+            style={{ backgroundImage: `url(${movie.thumbnail})` }}
+            onClick={() => getSingleMovie(movie._id)}
+          >
+            <footer>
+              <p>{movie.title}</p>
+              <p className="year">{movie.year}</p>
+            </footer>
+          </div>
+        ))}
       </div>
-      {Modal ? <SingleMovie /> : ""}
+      {Modal ? <SingleMovie SingleMovie={singleMovie} /> : ""}
     </Gallery>
   );
 };
@@ -63,6 +74,7 @@ const Gallery = styled.section`
 
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 
   .wrapper {
@@ -72,6 +84,15 @@ const Gallery = styled.section`
     background: var(--mainBlack);
     opacity: 0.8;
   }
+
+  h1 {
+    background-color: var(--mainBlue);
+    color: white;
+    padding: 10px;
+    width: 100%;
+    max-width: 950px;
+  }
+
   .cover {
     max-width: 1500px;
     width: 100%;
@@ -83,11 +104,11 @@ const Gallery = styled.section`
 
     .frame {
       width: 100%;
-      max-width: 350px;
+      max-width: 300px;
       margin-top: 26px;
       height: 300px;
       box-sizing: border-box;
-      background-image: url(${KOB});
+      background-color: var(--mainBlue);
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -119,6 +140,13 @@ const Gallery = styled.section`
           font-size: 14px;
         }
       }
+    }
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      /* align-self: flex-start; */
+      /* margin-left: 13vw; */
     }
   }
 `;
