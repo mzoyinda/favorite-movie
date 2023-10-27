@@ -4,19 +4,19 @@ import KOB from "../assets/kob.jpg";
 import Swal from "sweetalert2";
 import {SingleMovieContainer} from "../assets/styles"
 
-const SingleMovie = ({ SingleMovie }) => {
+const SingleMovie = ({ setModal, getMovies, SingleMovie }) => {
   useEffect(() => {
     console.log(SingleMovie);
   }, []);
 
   const DeleteMovie = async (id) => {
-    console.log("hey");
     const { value: code } = await Swal.fire({
       input: "text",
       inputLabel: "Authorize Delete",
       inputPlaceholder: "Enter Code to Authorize Delete",
     });
 
+    // checks if the user is authorized to delete movies
     if (code) {
       const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/${id}`;
       fetch(URL, {
@@ -33,12 +33,17 @@ const SingleMovie = ({ SingleMovie }) => {
           console.log(response);
           return response.json();
         })
+        // if authorized it deletes
         .then(function (data) {
           console.log(data);
           const message = data.message;
           if(message === "success"){
             Swal.fire("Movie Deleted Successfully!");
-          }else{
+            getMovies();
+            setModal(false);
+          }
+          // else it returns unauthorized
+          else{
             Swal.fire("Unauthorized User!");
           }
         });

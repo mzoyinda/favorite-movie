@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { FormContainer, SearchContainer } from "../assets/styles";
 
-const Form = () => {
+const Form = ({ getMovies }) => {
   const [open, setOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [movieDetails, setMovieDetails] = useState({});
   const [disableInputs, setDisableInputs] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const value = e.currentTarget.value;
@@ -61,9 +62,9 @@ const Form = () => {
         plot: data.Plot,
         year: data.Year,
         thumbnail: data.Poster,
-        imdbRating: data.imdbRating
+        imdbRating: data.imdbRating,
       });
-      // console.log(movieDetails);
+    // console.log(movieDetails);
 
     // disable filled inputs..
     setDisableInputs(true);
@@ -71,30 +72,62 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log(movieDetails);
-    //    get movie match from imdb with the inputed value
-    const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
-    const res = await fetch(URL, {
-      method: "POST",
-      body: JSON.stringify(movieDetails),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
 
+    // check if form is empty
+    if (Object.keys(movieDetails).length === 0) {
+      setLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Please input all fields",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } 
+    
+    // else push movie to server
+    else {
+      const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
+      const res = await fetch(URL, {
+        method: "POST",
+        body: JSON.stringify(movieDetails),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
     const data = await res.json();
-    Swal.fire({
-      icon: "success",
-      title: "Movie Created Successfully!",
-      showConfirmButton: false,
-      timer: 1500,
-    });
     console.log(data);
 
-    setMovieDetails({});
-    setOpen(false);
-  };
+    // if successful show successs screen and get latest movies
+      if (data.message === "movie created") {
+        Swal.fire({
+          icon: "success",
+          title: "Movie Created Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        console.log(data);
 
+        setLoading(false);
+        setMovieDetails({});
+        setOpen(false);
+
+        getMovies();
+      } 
+
+      // else show error screen
+      else {
+        setLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Some error occured",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }
+  };
 
   //  movie list component from search input
   const MovieList = () => {
@@ -193,7 +226,9 @@ const Form = () => {
           ""
         )}
         <div className="btn_Container">
-          <button onClick={handleSubmit}>Submit</button>
+          <button onClick={handleSubmit}>
+            {loading ? "Loading..." : "Submit"}
+          </button>
         </div>
       </div>
     </FormContainer>

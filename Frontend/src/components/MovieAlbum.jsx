@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import SingleMovie from "./SingleMovie";
 import { Gallery } from "../assets/styles";
+import Loading from "../assets/loading.gif";
 
-const Movie = () => {
+const Movie = ({Movies, getMovies}) => {
   const [Modal, setModal] = useState(false);
-  const [Movies, setMovies] = useState([]);
+  // const [Movies, setMovies] = useState([]);
   const [singleMovie, setSingleMovie] = useState({});
   const [query, setQuery] = useState("");
 
   // Movies gets populated from database in useeffect
   useEffect(() => {
-    //    get all movies from server
-    const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
-    fetch(URL)
-      .then(function (response) {
-        console.log(response);
-        return response.json();
-      })
-      .then(function (data) {
-        console.log(data);
-        setMovies(data);
-        console.log(Movies);
-      });
+    getMovies();
   }, []);
 
   
@@ -88,7 +77,9 @@ const Movie = () => {
         </div>
       </div>
       <div className="cover">
-        {filteredMovie.map((movie) => (
+        {filteredMovie.length === 0 ? (
+          <img src={Loading} alt="loading gif" />
+        ) : filteredMovie.map((movie) => (
           <div className="card">
             <div
               className="frame"
@@ -103,7 +94,8 @@ const Movie = () => {
           </div>
         ))}
       </div>
-      {Modal ? <SingleMovie SingleMovie={singleMovie} /> : ""}
+      {/* On click of a movie card, it should open the movie details component */}
+      {Modal ? <SingleMovie setModal={setModal} getMovies={getMovies} SingleMovie={singleMovie} /> : ""}
     </Gallery>
   );
 };
