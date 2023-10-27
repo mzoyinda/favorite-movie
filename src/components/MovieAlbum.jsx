@@ -48,15 +48,33 @@ const Movie = () => {
         className={Modal ? "wrapper" : ""}
         onClick={() => setModal(false)}
       ></div>
-      <h1>Trending Movies</h1>
+      <div className="header">
+        <h1>Trending Movies</h1>
+        <div className="searchbox">
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="search movie"
+          />
+          <select name="sort" id="sort">
+            <option value="">Sort By:</option>
+            <option value="">Title Ascending</option>
+            <option value="">Title Descending</option>
+            <option value="">Year Ascending</option>
+            <option value="">Year Descending</option>
+          </select>
+        </div>
+      </div>
       <div className="cover">
         {Movies.map((movie) => (
-          <div
-            className="frame"
-            key={movie._id}
-            style={{ backgroundImage: `url(${movie.thumbnail})` }}
-            onClick={() => getSingleMovie(movie._id)}
-          >
+          <div className="card">
+            <div
+              className="frame"
+              key={movie._id}
+              style={{ backgroundImage: `url(${movie.thumbnail})` }}
+              onClick={() => getSingleMovie(movie._id)}
+            ></div>
             <footer>
               <p>{movie.title}</p>
               <p className="year">{movie.year}</p>
@@ -85,12 +103,32 @@ const Gallery = styled.section`
     opacity: 0.8;
   }
 
-  h1 {
-    background-color: var(--mainBlue);
-    color: white;
-    padding: 10px;
-    width: 100%;
+  .header {
     max-width: 950px;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    background-color: var(--mainBlue);
+    display: flex;
+    justify-content: space-between;
+    .searchbox {
+      input,
+      select {
+        outline: 0;
+        border: transparent;
+      }
+      input {
+        margin-right: 20px;
+        padding: 5px;
+        padding-left: 12px;
+        width: 250px;
+        height: 20px;
+      }
+      select {
+        padding: 5px;
+        width: 150px;
+      }
+    }
   }
 
   .cover {
@@ -102,51 +140,37 @@ const Gallery = styled.section`
     flex-wrap: wrap;
     gap: 24px;
 
-    .frame {
-      width: 100%;
-      max-width: 300px;
-      margin-top: 26px;
-      height: 300px;
-      box-sizing: border-box;
-      background-color: var(--mainBlue);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: 5px solid var(--mainBlue);
-      /* padding-bottom: 10px; */
-
+    .card {
+      .frame {
+        width: 100%;
+        /* max-width: 300px; */
+        margin-top: 26px;
+        height: 300px;
+        box-sizing: border-box;
+        background-color: var(--mainBlue);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: 5px solid var(--mainBlue);
+        border-bottom: 0px;
+      }
       footer {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-end;
-        padding-left: 20px;
-
-        height: 100%;
-        background: linear-gradient(
-          rgba(0, 0, 0, 0) 78.21%,
-          rgba(255, 255, 255, 0.863) 96.31%
-        );
-        cursor: pointer;
-
+        padding: 10px;
+        background-color: var(--mainBlack);
         p {
-          color: var(--mainBlack);
-          font-size: 16px;
-          font-weight: 600;
-        }
-
-        p.year {
-          font-weight: 400;
+          color: white;
           font-size: 14px;
+          margin-top: 5px;
         }
       }
     }
   }
 
   @media (min-width: 768px) {
-    h1 {
-      /* align-self: flex-start; */
-      /* margin-left: 13vw; */
+    .card {
+      .frame {
+        width: 300px !important;
+      }
     }
   }
 `;
