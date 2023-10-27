@@ -35,6 +35,8 @@ Run the following commands in the project directory
 Runs the app in the development mode.\
 Open [http://localhost:5000](http://localhost:5000) to view it in your browser.
 
+### GOLDUSER PASSCODE
+`golduser!`
 
 ## ScreenRecord of the the website
 ![ChillTV Website](https://github.com/mzoyinda/favorite-movie/blob/main/image.gif)
