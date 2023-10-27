@@ -37,4 +37,4 @@ Open [http://localhost:5000](http://localhost:5000) to view it in your browser.
 
 
 ## ScreenRecord of the the website
-![ChillTV Website](https://github.com/mzoyinda/Chimoney-API-DevChallenge/blob/main/submissions/coffee-tip/image.gif)
+![ChillTV Website](https://github.com/mzoyinda/favorite-movie/blob/main/image.gif)
