@@ -48,7 +48,7 @@ const Form = ({ getMovies }) => {
 
   const getSingleMovie = async (movieId) => {
     // get movie details with movie id
-    const URL = `http://www.omdbapi.com/?i=${movieId}&apikey=${process.env.REACT_APP_API_KEY}`
+    const URL = `https://www.omdbapi.com/?i=${movieId}&apikey=${process.env.REACT_APP_API_KEY}`
     const result = await fetch(`${URL}`);
     const data = await result.json();
     
