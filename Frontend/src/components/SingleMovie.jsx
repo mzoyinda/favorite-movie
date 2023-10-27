@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import KOB from "../assets/kob.jpg";
 import Swal from "sweetalert2";
+import {SingleMovieContainer} from "../assets/styles"
 
 const SingleMovie = ({ SingleMovie }) => {
   useEffect(() => {
@@ -45,7 +46,7 @@ const SingleMovie = ({ SingleMovie }) => {
   };
 
   return (
-    <Container>
+    <SingleMovieContainer>
       <div className="flexbox">
         <img src={SingleMovie.thumbnail} alt="" />
         <div className="description">
@@ -81,78 +82,10 @@ const SingleMovie = ({ SingleMovie }) => {
           </div>
         </div>
       </div>
-    </Container>
+    </SingleMovieContainer>
   );
 };
 
-const Container = styled.section`
-  background-color: var(--mainBlue);
-  color: white;
-  position: fixed;
-  top: 15%;
-  height: 80vh;
-  width: 70vw;
 
-  .flexbox {
-    img {
-      width: 300px;
-      height: 450px;
-      object-fit: cover;
-      border: 2px solid var(--mainWhite);
-    }
-
-    .description {
-      h1 {
-        color: #d4aa3b;
-        font-family: cursive;
-        line-height: 46px;
-        font-size: 36px;
-        margin-bottom: 20px;
-      }
-      div {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 24px;
-
-        p {
-          color: white;
-        }
-      }
-      div + div {
-        margin-top: 24px;
-      }
-      .btn_container {
-        display: flex;
-        justify-content: center;
-      }
-
-      button {
-        background-color: #d4aa3b;
-        padding: 10px 25px;
-        outline: 0;
-        font-size: 14px;
-        margin-top: 4px;
-        border: transparent;
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  @media (min-width: 768px) {
-    .flexbox {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      height: 100%;
-
-      .description {
-        max-width: 330px;
-      }
-    }
-  }
-`;
 
 export default SingleMovie;

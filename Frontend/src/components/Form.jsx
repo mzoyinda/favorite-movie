@@ -95,6 +95,7 @@ const Form = () => {
     setOpen(false);
   };
 
+
   //  movie list component from search input
   const MovieList = () => {
     return (
@@ -130,6 +131,7 @@ const Form = () => {
           onClick={() => setOpen(true)}
           placeholder="Add a movie"
         />
+
         {/* Show/Hide the search list component */}
         {disableInputs ? "" : <MovieList />}
 
@@ -151,14 +153,6 @@ const Form = () => {
               placeholder="Release Year"
               disabled={disableInputs}
             />
-            {/* <input
-              type="text"
-              name="rating"
-              value={movieDetails.imdbRating}
-              onChange={handleChange}
-              placeholder="External Rating (optional)"
-              disabled={disableInputs}
-            /> */}
             <input
               type="text"
               name="thumbnail"
