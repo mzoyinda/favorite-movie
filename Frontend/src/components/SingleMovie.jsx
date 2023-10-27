@@ -18,7 +18,7 @@ const SingleMovie = ({ SingleMovie }) => {
     });
 
     if (code) {
-      const URL = `http://localhost:5000/api/movies/${id}`;
+      const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/${id}`;
       fetch(URL, {
         method: "DELETE",
         body: JSON.stringify({

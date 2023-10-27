@@ -12,7 +12,7 @@ const Movie = () => {
   // Movies gets populated from database in useeffect
   useEffect(() => {
     //    get all movies from server
-    const URL = "http://localhost:5000/api/movies/";
+    const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
     fetch(URL)
       .then(function (response) {
         console.log(response);
@@ -30,7 +30,7 @@ const Movie = () => {
   const getSingleMovie = (id) => {
     console.log(id);
     setModal(true);
-    const URL = `http://localhost:5000/api/movies/${id}`;
+    const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/${id}`;
     fetch(URL)
       .then(function (response) {
         console.log(response);

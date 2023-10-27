@@ -73,7 +73,7 @@ const Form = () => {
     e.preventDefault();
     console.log(movieDetails);
     //    get movie match from imdb with the inputed value
-    const URL = "http://localhost:5000/api/movies/";
+    const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
     const res = await fetch(URL, {
       method: "POST",
       body: JSON.stringify(movieDetails),
