@@ -51,17 +51,20 @@ const Form = ({ getMovies }) => {
     const URL = `http://www.omdbapi.com/?i=${movieId}&apikey=${process.env.REACT_APP_API_KEY}`
     const result = await fetch(`${URL}`);
     const data = await result.json();
-    console.log(data);
+    
+    const movieResult = data;
+    console.log(movieResult);
+
     if (data.Response === "True")
       // set movie object to the received details:
       setMovieDetails({
         ...movieDetails,
-        title: data.Title,
-        genre: data.Genre,
-        plot: data.Plot,
-        year: data.Year,
-        thumbnail: data.Poster,
-        imdbRating: data.imdbRating,
+        title: movieResult.Title,
+        genre: movieResult.Genre,
+        plot: movieResult.Plot,
+        year: movieResult.Year,
+        thumbnail: movieResult.Poster,
+        imdbRating: movieResult.imdbRating,
       });
     // console.log(movieDetails);
 
