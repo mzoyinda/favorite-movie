@@ -5,7 +5,15 @@ import { FormContainer, SearchContainer } from "../assets/styles";
 const Form = ({ getMovies }) => {
   const [open, setOpen] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [movieDetails, setMovieDetails] = useState({});
+  const [movieDetails, setMovieDetails] = useState({
+    title: "",
+    genre: "",
+    year: "",
+    plot:"",
+    thumbnail:"",
+    review:"",
+    myRating: ""
+  });
   const [disableInputs, setDisableInputs] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +26,7 @@ const Form = ({ getMovies }) => {
       ...movieDetails,
       [name]: value,
     });
-    // console.log(movieDetails);
+    console.log(movieDetails);
   };
 
   const getMovieList = async (e) => {
@@ -48,10 +56,10 @@ const Form = ({ getMovies }) => {
 
   const getSingleMovie = async (movieId) => {
     // get movie details with movie id
-    const URL = `https://www.omdbapi.com/?i=${movieId}&apikey=${process.env.REACT_APP_API_KEY}`
+    const URL = `https://www.omdbapi.com/?i=${movieId}&apikey=${process.env.REACT_APP_API_KEY}`;
     const result = await fetch(`${URL}`);
     const data = await result.json();
-    
+
     const movieResult = data;
     console.log(movieResult);
 
@@ -72,62 +80,87 @@ const Form = ({ getMovies }) => {
     setDisableInputs(true);
   };
 
+  const formValidation = () => {
+    // check if form is empty
+    if (Object.keys(movieDetails).length === 0) {
+      setLoading(false);
+      return false;
+    } else if (
+      movieDetails.myRating === "" ||
+      movieDetails.review === "" ||
+      movieDetails.title === ""  ||
+      movieDetails.genre === "" ||
+      movieDetails.year === "" ||
+      movieDetails.thumbnail === "" ||
+      movieDetails.plot  === ""  
+    ) {
+      setLoading(false);
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const sendMovie = async () => {
+    // push validated movie object to server
+    const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
+    const res = await fetch(URL, {
+      method: "POST",
+      body: JSON.stringify(movieDetails),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    const data = await res.json();
+    console.log(data);
+
+    // if successful show successs screen and get latest movies
+    if (data.message === "movie created") {
+      Swal.fire({
+        icon: "success",
+        title: "Movie Created Successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(data);
+
+      setLoading(false);
+      setMovieDetails({});
+      setOpen(false);
+
+      getMovies();
+    }
+    // else show error screen
+    else {
+      setLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Some error occured",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     console.log(movieDetails);
 
-    // check if form is empty
-    if (Object.keys(movieDetails).length === 0) {
-      setLoading(false);
+    const isValidated = formValidation();
+
+    // console.log(isValidated)
+
+    // send movie to server if form inputs are validated;
+    if (isValidated) {
+      sendMovie();
+    } else {
       Swal.fire({
         icon: "error",
-        title: "Please input all fields",
+        title: "Please fill all inputs",
         showConfirmButton: false,
         timer: 1500,
       });
-    } 
-    
-    // else push movie to server
-    else {
-      const URL = `${process.env.REACT_APP_MOVIE_SERVER}/api/movies/`;
-      const res = await fetch(URL, {
-        method: "POST",
-        body: JSON.stringify(movieDetails),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-    const data = await res.json();
-    console.log(data);
-
-    // if successful show successs screen and get latest movies
-      if (data.message === "movie created") {
-        Swal.fire({
-          icon: "success",
-          title: "Movie Created Successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        console.log(data);
-
-        setLoading(false);
-        setMovieDetails({});
-        setOpen(false);
-
-        getMovies();
-      } 
-
-      // else show error screen
-      else {
-        setLoading(false);
-        Swal.fire({
-          icon: "error",
-          title: "Some error occured",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
     }
   };
 
