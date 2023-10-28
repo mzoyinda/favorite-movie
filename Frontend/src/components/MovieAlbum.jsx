@@ -79,7 +79,11 @@ const Movie = ({Movies, getMovies}) => {
       <div className="cover">
         {filteredMovie.length === 0 ? (
           <img src={Loading} alt="loading gif" />
-        ) : filteredMovie.map((movie) => (
+        )
+         : 
+        filteredMovie
+       .sort((a,b)=>new Date(b.createdAt) - new Date(a.createdAt))
+        .map((movie) => (
           <div className="card">
             <div
               className="frame"
